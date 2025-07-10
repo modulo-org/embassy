@@ -223,7 +223,7 @@ impl<'s, 'd, W: Word> Reader<'s, 'd, W> {
 pub struct I2S<'d, W: Word> {
     #[allow(dead_code)]
     mode: Mode,
-    spi: Spi<'d, Async>,
+    spi: Spi<'d, Async, Master>,
     txsd: Option<Peri<'d, AnyPin>>,
     rxsd: Option<Peri<'d, AnyPin>>,
     ws: Option<Peri<'d, AnyPin>>,
