@@ -533,6 +533,27 @@ impl<'d, CM: CommunicationMode> Spi<'d, Blocking, CM> {
         )
     }
 
+    /// Create a new blocking SPI slave driver.
+    pub fn new_blocking_slave<T: Instance>(
+        peri: Peri<'d, T>,
+        sck: Peri<'d, impl SckPin<T>>,
+        mosi: Peri<'d, impl MosiPin<T>>,
+        miso: Peri<'d, impl MisoPin<T>>,
+        cs: Peri<'d, impl CsPin<T>>,
+        config: Config,
+    ) -> Self {
+        Self::new_inner(
+            peri,
+            new_pin!(sck, config.sck_af()),
+            new_pin!(mosi, AfType::output(OutputType::PushPull, config.rise_fall_speed)),
+            new_pin!(miso, AfType::input(config.miso_pull)),
+            new_pin!(cs, AfType::input(Pull::None)),
+            None,
+            None,
+            config,
+        )
+    }
+
     /// Create a new blocking SPI driver, in RX-only mode (only MISO pin, no MOSI).
     pub fn new_blocking_rxonly<T: Instance>(
         peri: Peri<'d, T>,
@@ -609,6 +630,29 @@ impl<'d, CM: CommunicationMode> Spi<'d, Async, CM> {
             new_pin!(mosi, AfType::output(OutputType::PushPull, config.rise_fall_speed)),
             new_pin!(miso, AfType::input(config.miso_pull)),
             None,
+            new_dma!(tx_dma),
+            new_dma!(rx_dma),
+            config,
+        )
+    }
+
+    /// Create a new SPI slave driver.
+    pub fn new_slave<T: Instance>(
+        peri: Peri<'d, T>,
+        sck: Peri<'d, impl SckPin<T>>,
+        mosi: Peri<'d, impl MosiPin<T>>,
+        miso: Peri<'d, impl MisoPin<T>>,
+        cs: Peri<'d, impl CsPin<T>>,
+        tx_dma: Peri<'d, impl TxDma<T>>,
+        rx_dma: Peri<'d, impl RxDma<T>>,
+        config: Config,
+    ) -> Self {
+        Self::new_inner(
+            peri,
+            new_pin!(sck, config.sck_af()),
+            new_pin!(mosi, AfType::output(OutputType::PushPull, config.rise_fall_speed)),
+            new_pin!(miso, AfType::input(config.miso_pull)),
+            new_pin!(cs, AfType::input(Pull::None)),
             new_dma!(tx_dma),
             new_dma!(rx_dma),
             config,
