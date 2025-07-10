@@ -136,7 +136,7 @@ pub mod mode {
     #[allow(private_bounds)]
     pub trait CommunicationMode: SealedMode {
         /// Spi communication mode
-        #[cfg(any(spi_v1, spi_f1, spi_v2))]
+        #[cfg(not(any(spi_v3, spi_v4, spi_v5)))]
         const MASTER: vals::Mstr;
         #[cfg(any(spi_v3, spi_v4, spi_v5))]
         const MASTER: vals::Master;
@@ -149,7 +149,7 @@ pub mod mode {
 
     impl SealedMode for Master {}
     impl CommunicationMode for Master {
-        #[cfg(any(spi_v1, spi_f1, spi_v2))]
+        #[cfg(not(any(spi_v3, spi_v4, spi_v5)))]
         const MASTER: vals::Mstr = vals::Mstr::MASTER;
         #[cfg(any(spi_v3, spi_v4, spi_v5))]
         const MASTER: vals::Master = vals::Master::MASTER;
@@ -157,7 +157,7 @@ pub mod mode {
 
     impl SealedMode for Slave {}
     impl CommunicationMode for Slave {
-        #[cfg(any(spi_v1, spi_f1, spi_v2))]
+        #[cfg(not(any(spi_v3, spi_v4, spi_v5)))]
         const MASTER: vals::Mstr = vals::Mstr::SLAVE;
         #[cfg(any(spi_v3, spi_v4, spi_v5))]
         const MASTER: vals::Master = vals::Master::SLAVE;
