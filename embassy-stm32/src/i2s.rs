@@ -6,7 +6,7 @@ use stm32_metapac::spi::vals;
 use crate::dma::{ringbuffer, ChannelAndRequest, ReadableRingBuffer, TransferOptions, WritableRingBuffer};
 use crate::gpio::{AfType, AnyPin, OutputType, SealedPin, Speed};
 use crate::mode::Async;
-use crate::spi::{Config as SpiConfig, RegsExt as _, *};
+use crate::spi::{mode::Master, Config as SpiConfig, RegsExt as _, *};
 use crate::time::Hertz;
 use crate::Peri;
 
