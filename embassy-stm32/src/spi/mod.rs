@@ -163,7 +163,7 @@ pub mod mode {
         const MASTER: vals::Master = vals::Master::SLAVE;
     }
 }
-use mode::CommunicationMode;
+use mode::{CommunicationMode, Master, Slave};
 
 /// SPI driver.
 pub struct Spi<'d, M: PeriMode, CM: CommunicationMode> {
@@ -512,27 +512,7 @@ impl<'d, M: PeriMode, CM: CommunicationMode> Spi<'d, M, CM> {
     }
 }
 
-impl<'d, CM: CommunicationMode> Spi<'d, Blocking, CM> {
-    /// Create a new blocking SPI driver.
-    pub fn new_blocking<T: Instance>(
-        peri: Peri<'d, T>,
-        sck: Peri<'d, impl SckPin<T>>,
-        mosi: Peri<'d, impl MosiPin<T>>,
-        miso: Peri<'d, impl MisoPin<T>>,
-        config: Config,
-    ) -> Self {
-        Self::new_inner(
-            peri,
-            new_pin!(sck, config.sck_af()),
-            new_pin!(mosi, AfType::output(OutputType::PushPull, config.rise_fall_speed)),
-            new_pin!(miso, AfType::input(config.miso_pull)),
-            None,
-            None,
-            None,
-            config,
-        )
-    }
-
+impl<'d> Spi<'d, Blocking, Slave> {
     /// Create a new blocking SPI slave driver.
     pub fn new_blocking_slave<T: Instance>(
         peri: Peri<'d, T>,
@@ -548,6 +528,28 @@ impl<'d, CM: CommunicationMode> Spi<'d, Blocking, CM> {
             new_pin!(mosi, AfType::output(OutputType::PushPull, config.rise_fall_speed)),
             new_pin!(miso, AfType::input(config.miso_pull)),
             new_pin!(cs, AfType::input(Pull::None)),
+            None,
+            None,
+            config,
+        )
+    }
+}
+
+impl<'d> Spi<'d, Blocking, Master> {
+    /// Create a new blocking SPI driver.
+    pub fn new_blocking<T: Instance>(
+        peri: Peri<'d, T>,
+        sck: Peri<'d, impl SckPin<T>>,
+        mosi: Peri<'d, impl MosiPin<T>>,
+        miso: Peri<'d, impl MisoPin<T>>,
+        config: Config,
+    ) -> Self {
+        Self::new_inner(
+            peri,
+            new_pin!(sck, config.sck_af()),
+            new_pin!(mosi, AfType::output(OutputType::PushPull, config.rise_fall_speed)),
+            new_pin!(miso, AfType::input(config.miso_pull)),
+            None,
             None,
             None,
             config,
@@ -613,29 +615,7 @@ impl<'d, CM: CommunicationMode> Spi<'d, Blocking, CM> {
     }
 }
 
-impl<'d, CM: CommunicationMode> Spi<'d, Async, CM> {
-    /// Create a new SPI driver.
-    pub fn new<T: Instance>(
-        peri: Peri<'d, T>,
-        sck: Peri<'d, impl SckPin<T>>,
-        mosi: Peri<'d, impl MosiPin<T>>,
-        miso: Peri<'d, impl MisoPin<T>>,
-        tx_dma: Peri<'d, impl TxDma<T>>,
-        rx_dma: Peri<'d, impl RxDma<T>>,
-        config: Config,
-    ) -> Self {
-        Self::new_inner(
-            peri,
-            new_pin!(sck, config.sck_af()),
-            new_pin!(mosi, AfType::output(OutputType::PushPull, config.rise_fall_speed)),
-            new_pin!(miso, AfType::input(config.miso_pull)),
-            None,
-            new_dma!(tx_dma),
-            new_dma!(rx_dma),
-            config,
-        )
-    }
-
+impl<'d> Spi<'d, Async, Slave> {
     /// Create a new SPI slave driver.
     pub fn new_slave<T: Instance>(
         peri: Peri<'d, T>,
@@ -653,6 +633,30 @@ impl<'d, CM: CommunicationMode> Spi<'d, Async, CM> {
             new_pin!(mosi, AfType::output(OutputType::PushPull, config.rise_fall_speed)),
             new_pin!(miso, AfType::input(config.miso_pull)),
             new_pin!(cs, AfType::input(Pull::None)),
+            new_dma!(tx_dma),
+            new_dma!(rx_dma),
+            config,
+        )
+    }
+}
+
+impl<'d> Spi<'d, Async, Master> {
+    /// Create a new SPI driver.
+    pub fn new<T: Instance>(
+        peri: Peri<'d, T>,
+        sck: Peri<'d, impl SckPin<T>>,
+        mosi: Peri<'d, impl MosiPin<T>>,
+        miso: Peri<'d, impl MisoPin<T>>,
+        tx_dma: Peri<'d, impl TxDma<T>>,
+        rx_dma: Peri<'d, impl RxDma<T>>,
+        config: Config,
+    ) -> Self {
+        Self::new_inner(
+            peri,
+            new_pin!(sck, config.sck_af()),
+            new_pin!(mosi, AfType::output(OutputType::PushPull, config.rise_fall_speed)),
+            new_pin!(miso, AfType::input(config.miso_pull)),
+            None,
             new_dma!(tx_dma),
             new_dma!(rx_dma),
             config,
