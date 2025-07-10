@@ -231,7 +231,7 @@ impl<'d, M: PeriMode, CM: CommunicationMode> Spi<'d, M, CM> {
                 w.set_spe(true);
                 w.set_lsbfirst(lsbfirst);
                 w.set_ssi(CM::MASTER == vals::Mstr::MASTER);
-                w.set_ssm(true);
+                w.set_ssm(CM::MASTER == vals::Mstr::MASTER);
                 w.set_crcen(false);
                 w.set_bidimode(vals::Bidimode::UNIDIRECTIONAL);
                 // we're doing "fake rxonly", by actually writing one
@@ -257,7 +257,7 @@ impl<'d, M: PeriMode, CM: CommunicationMode> Spi<'d, M, CM> {
                 w.set_br(br);
                 w.set_lsbfirst(lsbfirst);
                 w.set_ssi(CM::MASTER == vals::Mstr::MASTER);
-                w.set_ssm(true);
+                w.set_ssm(CM::MASTER == vals::Mstr::MASTER);
                 w.set_crcen(false);
                 w.set_bidimode(vals::Bidimode::UNIDIRECTIONAL);
                 w.set_spe(true);
@@ -272,7 +272,7 @@ impl<'d, M: PeriMode, CM: CommunicationMode> Spi<'d, M, CM> {
                 w.set_cpha(cpha);
                 w.set_cpol(cpol);
                 w.set_lsbfirst(lsbfirst);
-                w.set_ssm(true);
+                w.set_ssm(CM::MASTER == vals::Master::MASTER);
                 w.set_master(CM::MASTER);
                 w.set_comm(vals::Comm::FULL_DUPLEX);
                 w.set_ssom(vals::Ssom::ASSERTED);
