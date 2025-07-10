@@ -1288,7 +1288,7 @@ impl embedded_hal_1::spi::Error for Error {
     }
 }
 
-impl<'d, W: Word> embedded_hal_async::spi::SpiBus<W> for Spi<'d, Async, Master> {
+impl<'d, W: Word, CM: CommunicationMode> embedded_hal_async::spi::SpiBus<W> for Spi<'d, Async, CM> {
     async fn flush(&mut self) -> Result<(), Self::Error> {
         Ok(())
     }
