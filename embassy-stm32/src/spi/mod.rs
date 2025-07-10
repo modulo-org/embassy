@@ -138,6 +138,7 @@ pub mod mode {
         /// Spi communication mode
         #[cfg(not(any(spi_v3, spi_v4, spi_v5)))]
         const MASTER: vals::Mstr;
+        /// Spi communication mode
         #[cfg(any(spi_v3, spi_v4, spi_v5))]
         const MASTER: vals::Master;
     }
