@@ -746,7 +746,7 @@ impl<'d> Spi<'d, Async, Master> {
         config.bit_order = BitOrder::MsbFirst;
         config.frequency = freq;
 
-        Self::new_inner(peri, None, None, None, new_dma!(tx_dma), new_dma!(rx_dma), config)
+        Self::new_inner(peri, None, None, None, None, new_dma!(tx_dma), new_dma!(rx_dma), config)
     }
 
     #[allow(dead_code)]
