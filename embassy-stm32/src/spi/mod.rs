@@ -757,7 +757,9 @@ impl<'d> Spi<'d, Async, Master> {
     ) -> Self {
         Self::new_inner(peri, None, None, None, None, tx_dma, rx_dma, config)
     }
+}
 
+impl<'d, CM: CommunicationMode> Spi<'d, Async, CM> {
     /// SPI write, using DMA.
     pub async fn write<W: Word>(&mut self, data: &[W]) -> Result<(), Error> {
         if data.is_empty() {
