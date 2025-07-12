@@ -900,7 +900,7 @@ impl<'d, CM: CommunicationMode> Spi<'d, Async, CM> {
         let clock_byte_count = data.len();
 
         let rx_src = self.info.regs.rx_ptr();
-        let rx_f = unsafe { self.rx_dma.as_mut().unwrap().read(rx_src, data, Default::default()) };
+        let mut rx_f = unsafe { self.rx_dma.as_mut().unwrap().read(rx_src, data, Default::default()) };
 
         let tx_dst = self.info.regs.tx_ptr();
         let clock_byte = W::default();
