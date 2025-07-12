@@ -904,7 +904,7 @@ impl<'d, CM: CommunicationMode> Spi<'d, Async, CM> {
 
         let tx_dst = self.info.regs.tx_ptr();
         let clock_byte = W::default();
-        let tx_f = unsafe {
+        let mut tx_f = unsafe {
             self.tx_dma
                 .as_mut()
                 .unwrap()
@@ -921,6 +921,7 @@ impl<'d, CM: CommunicationMode> Spi<'d, Async, CM> {
         });
 
         rx_f.request_stop();
+        tx_f.request_stop();
         join(tx_f, rx_f).await;
 
         finish_dma(self.info.regs);
