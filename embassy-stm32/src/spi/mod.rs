@@ -920,6 +920,7 @@ impl<'d, CM: CommunicationMode> Spi<'d, Async, CM> {
             w.set_cstart(true);
         });
 
+        rx_f.request_stop();
         join(tx_f, rx_f).await;
 
         finish_dma(self.info.regs);
