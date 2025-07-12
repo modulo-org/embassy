@@ -850,7 +850,7 @@ impl<'d, CM: CommunicationMode> Spi<'d, Async, CM> {
             regs.cr1().modify(|w| {
                 w.set_cstart(true);
             });
-
+            transfer.request_stop();
             transfer.await;
 
             finish_dma(regs);
